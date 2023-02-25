@@ -1,15 +1,13 @@
 FROM node:alpine
+RUN apk add --no-cache bash
 
-RUN mkdir -p /usr/src/node-app && chown -R node:node /usr/src/node-app
+WORKDIR /app/api
 
-WORKDIR /usr/src/node-app
+COPY ./ /app/api
 
-COPY package.json yarn.lock ./
+WORKDIR /app/api
+RUN npm install
 
-USER node
-
-RUN yarn install --pure-lockfile
-
-COPY --chown=node:node . .
-
-EXPOSE 3000
+ENV PORT 3000
+EXPOSE $PORT
+CMD [ "npm", "start" ]
